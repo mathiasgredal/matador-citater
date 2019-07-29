@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Matador</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.4.5/fuse.min.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <form name="myform" action="javascript:handleQuery(query.value)">  
+        <input type="text" name="query" id="query" maxlength="100"> 
+        <input name="Submit"  type="submit" value="Søg"/>
+    </form>
+    <video id="video" width="320" height="240" controls>
+    </video>
+
+    <script>
+        var formattedSubtitles = [];
+        var videoUrls = ["https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/08-03-2008/40263_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/08-03-2008/40268_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/08-03-2008/40261_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/08-03-2008/40274_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/08-03-2008/40273_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/08-03-2008/40277_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/08-03-2008/40311_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/08-03-2008/40312_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/08-03-2008/40315_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/08-03-2008/40322_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/08-03-2008/40325_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/08-03-2008/40345_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/11-03-2008/40346_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/11-03-2008/40349_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/11-03-2008/40353_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/11-03-2008/40357_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/11-03-2008/40363_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/11-03-2008/40367_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/11-03-2008/40371_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/11-03-2008/40373_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/11-03-2008/43062_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/11-03-2008/40370_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/11-03-2008/40372_720x540x1400K.mp4/playlist.m3u8",
+                         "https://vod-bonanza.dr.dk/bonanza/mp4:bonanza/bonanza/11-03-2008/40408_720x540x1400K.mp4/playlist.m3u8"]
+        var video = document.getElementById('video');
+        var source = document.createElement('source');
+        source.setAttribute('src', "http://www.tools4movies.com/trailers/1012/Despicable%20Me%202.mp4");
+        video.innerHTML = '';
+        video.appendChild(source);
+
+        function handleQuery(searchQuery){
+            var options = {
+                shouldSort: true,
+                minMatchCharLength: 2,
+                keys: [
+                    "text"
+                ]
+            };
+            var fuse = new Fuse(formattedSubtitles, options); // "list" is the item array
+            var result = fuse.search(searchQuery);
+            if(result.length > 0){
+                playVideo(result[0].start, result[0].episode)
+            }
+            else{
+                alert("Kan ikke finde citat")
+            }
+        }
+
+        function playVideo(start, episode){
+            video.pause();
+            source.setAttribute('src', videoUrls[episode-1]+"#t="+(start/1000-2));
+            video.load();
+            video.play();
+        }
+
+        fetch('matador.json')
+            .then(response => response.json())
+            .then(jsonResponse => {
+                var subtitles = jsonResponse;
+                for (var subtitle of subtitles) {
+                    formattedSubtitles.push({
+                        start: subtitle[0],
+                        stop: subtitle[1],
+                        text: subtitle[2],
+                        episode: subtitle[3]
+                    });
+                }
+            })
+    </script>
+</body>
+
+</html>
