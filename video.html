@@ -13,34 +13,34 @@
     <link rel="stylesheet" href="assets/css/Search.css">
 </head>
 
-<body>
+<body><script>
+	var urlParams = new URLSearchParams(window.location.search);
+	window.onload = function () { 
+		playVideo(urlParams.getAll('episode')[0],urlParams.getAll('start')[0]);
+	}
+</script>
     <div>
         <div class="header-blue">
             <nav class="navbar navbar-dark navbar-expand-md navigation-clean-search">
-                <div class="container"><a class="navbar-brand" href="#">Matador Citater</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-                    <div class="collapse navbar-collapse"
-                        id="navcol-1">
+                <div class="container"><a class="navbar-brand" href="/index.html">Matador Citater</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+                    <div
+                        class="collapse navbar-collapse" id="navcol-1">
                         <ul class="nav navbar-nav">
                             <li class="nav-item" role="presentation"><a class="nav-link active" href="#">Bedste citater</a></li>
                             <li class="nav-item" role="presentation"><a class="nav-link" href="#">Om matador</a></li>
                         </ul>
-                    </div>
                 </div>
-            </nav>
-            <div class="container hero">
-                <div class="row">
-                    <div class="col-12 col-lg-6 col-xl-5 offset-xl-1" style="margin-top:-140px;">
-                        <h1>Find dit yndlings citat</h1>
-                        <p>Matador er en lang serie, med mange scener. Det kan derfor være svært at finde et citat som passer til lejligheden. Nu kan du gøre netop dette, ved at bruge søgefeltet.</p><form class="search-form" action="javascript:handleQuery(query.value)">
-    <div class="input-group">
-        <div class="input-group-prepend"></div>
-		<input type="text" name="query" id="query" placeholder="Dit matador citat" class="form-control" />
-        <div class="input-group-append"><input class="btn btn-light" name="Submit"  type="submit" value="Søg"/></div>
-    </div>
-</form></div>
-                </div>
-            </div>
         </div>
+        </nav>
+        <div class="container hero" id="searchcontainer"><video id="video" controls></video>
+<script>         
+	var video = document.getElementById('video');
+	var source = document.createElement('source');
+	source.setAttribute('src', "");
+	video.innerHTML = '';
+	video.appendChild(source);
+</script></div>
+    </div>
     </div>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
