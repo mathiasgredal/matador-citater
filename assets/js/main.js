@@ -1,5 +1,5 @@
 function handleQuery(searchQuery) {
-    var url = location.origin + "/search.html?query=" + searchQuery;
+    var url = location.origin + "/matador-citater/search.html?query=" + searchQuery;
 
     window.open(url, "_self")
 }
@@ -103,7 +103,7 @@ function displayResults(results) {
 	
 	for(var result of results){
 		var time = new Date(result.start).toISOString().substr(11, 8);
-		var url = location.origin + "/video.html?episode=" + result.episode+"&start="+result.start;
+		var url = location.origin + "/matador-citater/video.html?episode=" + result.episode+"&start="+result.start;
 		var cardtemplate = `<div class="card" style="margin-bottom:20px;">
 			<div class="card-body">
 				<img style="display: inline-block;" width="300px" src="`+thumbnails[result.episode]+`"/>
